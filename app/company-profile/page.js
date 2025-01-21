@@ -7,7 +7,7 @@ export default function CompanyProfile() {
       <div className="max-w-4xl mx-auto bg-white rounded-lg shadow-md p-8">
         <h1 className="text-4xl font-bold text-blue-700 flex items-center gap-2 mb-6">
           <Library className="w-8 h-8 text-blue-500" />
-          La'Moniega Integrated Services Ltd
+          La&apos;Moniega Integrated Services Ltd
         </h1>
         <p className="italic text-gray-600 mb-8 text-lg">
           Your trusted partner in professional printing services, delivering excellence and quality since our establishment.
