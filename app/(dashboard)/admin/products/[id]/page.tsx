@@ -2,7 +2,7 @@
 import { CustomButton, DashboardSidebar, SectionTitle } from "@/components";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useCallback } from "react";
 import toast from "react-hot-toast";
 import {
   convertCategoryNameToURLFriendly as convertSlugToURLFriendly,
@@ -12,6 +12,26 @@ import { nanoid } from "nanoid";
 
 interface DashboardProductDetailsProps {
   params: { id: number };
+}
+
+interface Product {
+  title: string;
+  slug: string;
+  price: number;
+  manufacturer: string;
+  description: string;
+  mainImage: string;
+  inStock: number;
+  categoryId: string;
+}
+
+interface Category {
+  id: string;
+  name: string;
+}
+
+interface OtherImages {
+  image: string;
 }
 
 const DashboardProductDetails = ({
@@ -27,34 +47,31 @@ const DashboardProductDetails = ({
     const requestOptions = {
       method: "DELETE",
     };
-    fetch(`http://localhost:3001/api/products/${id}`, requestOptions)
-      .then((response) => {
-        if (response.status !== 204) {
-          if (response.status === 400) {
-            toast.error(
-              "Cannot delete the product because of foreign key constraint"
-            );
-          } else {
-            throw Error("There was an error while deleting product");
-          }
+    try {
+      const response = await fetch(`http://localhost:3001/api/products/${id}`, requestOptions);
+      if (response.status !== 204) {
+        if (response.status === 400) {
+          toast.error("Cannot delete the product because of foreign key constraint");
         } else {
-          toast.success("Product deleted successfully");
-          router.push("/admin/products");
+          throw new Error("There was an error while deleting product");
         }
-      })
-      .catch((error) => {
-        toast.error("There was an error while deleting product");
-      });
+      } else {
+        toast.success("Product deleted successfully");
+        router.push("/admin/products");
+      }
+    } catch (error) {
+      toast.error("There was an error while deleting product");
+    }
   };
 
   // functionality for updating product
   const updateProduct = async () => {
     if (
-      product?.title === "" ||
-      product?.slug === "" ||
-      product?.price.toString() === "" ||
-      product?.manufacturer === "" ||
-      product?.description === ""
+      !product?.title ||
+      !product?.slug ||
+      !product?.price ||
+      !product?.manufacturer ||
+      !product?.description
     ) {
       toast.error("You need to enter values in input fields");
       return;
@@ -65,22 +82,22 @@ const DashboardProductDetails = ({
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(product),
     };
-    fetch(`http://localhost:3001/api/products/${id}`, requestOptions)
-      .then((response) => {
-        if (response.status === 200) {
-          return response.json();
-        } else {
-          throw Error("There was an error while updating product");
-        }
-      })
-      .then((data) => toast.success("Product successfully updated"))
-      .catch((error) => {
-        toast.error("There was an error while updating product");
-      });
+
+    try {
+      const response = await fetch(`http://localhost:3001/api/products/${id}`, requestOptions);
+      if (response.status === 200) {
+        const data = await response.json();
+        toast.success("Product successfully updated");
+      } else {
+        throw new Error("There was an error while updating product");
+      }
+    } catch (error) {
+      toast.error("There was an error while updating product");
+    }
   };
 
   // functionality for uploading main image file
-  const uploadFile = async (file: any) => {
+  const uploadFile = async (file: File) => {
     const formData = new FormData();
     formData.append("uploadedFile", file);
 
@@ -92,54 +109,76 @@ const DashboardProductDetails = ({
 
       if (response.ok) {
         const data = await response.json();
+        toast.success("File uploaded successfully");
       } else {
         toast.error("File upload unsuccessful.");
       }
     } catch (error) {
-      console.error("There was an error while during request sending:", error);
+      console.error("There was an error during request sending:", error);
       toast.error("There was an error during request sending");
     }
   };
 
   // fetching main product data including other product images
-  const fetchProductData = async () => {
-    fetch(`http://localhost:3001/api/products/${id}`)
-      .then((res) => {
-        return res.json();
-      })
-      .then((data) => {
-        setProduct(data);
-      });
+  const fetchProductData = useCallback(async () => {
+    try {
+      const response = await fetch(`http://localhost:3001/api/products/${id}`);
+      const data = await response.json();
+      setProduct(data);
 
-    const imagesData = await fetch(`http://localhost:3001/api/images/${id}`, {
-      cache: "no-store",
-    });
-    const images = await imagesData.json();
-    setOtherImages((currentImages) => images);
-  };
-
-  // fetching all product categories. It will be used for displaying categories in select category input
-  const fetchCategories = async () => {
-    fetch(`http://localhost:3001/api/categories`)
-      .then((res) => {
-        return res.json();
-      })
-      .then((data) => {
-        setCategories(data);
+      const imagesData = await fetch(`http://localhost:3001/api/images/${id}`, {
+        cache: "no-store",
       });
-  };
+      const images = await imagesData.json();
+      setOtherImages(images);
+    } catch (error) {
+      console.error("Error fetching product data:", error);
+      toast.error("Error loading product data");
+    }
+  }, [id]);
+
+  // fetching all product categories
+  const fetchCategories = useCallback(async () => {
+    try {
+      const response = await fetch(`http://localhost:3001/api/categories`);
+      const data = await response.json();
+      setCategories(data);
+    } catch (error) {
+      console.error("Error fetching categories:", error);
+      toast.error("Error loading categories");
+    }
+  }, []);
 
   useEffect(() => {
     fetchCategories();
     fetchProductData();
-  }, [id]);
+  }, [fetchCategories, fetchProductData]);
+
+  // Handle file change with proper type checking
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const files = e.target.files;
+    if (files && files.length > 0) {
+      const selectedFile = files[0];
+      
+      // Optional: Add file type validation
+      const validTypes = ['image/jpeg', 'image/png', 'image/gif'];
+      if (!validTypes.includes(selectedFile.type)) {
+        toast.error('Please select a valid image file (JPEG, PNG, or GIF)');
+        return;
+      }
+
+      uploadFile(selectedFile);
+      setProduct(prev => prev ? { ...prev, mainImage: selectedFile.name } : prev);
+    }
+  };
 
   return (
     <div className="bg-white flex justify-start max-w-screen-2xl mx-auto xl:h-full max-xl:flex-col max-xl:gap-y-5">
       <DashboardSidebar />
       <div className="flex flex-col gap-y-7 xl:ml-5 w-full max-xl:px-5">
         <h1 className="text-3xl font-semibold">Product details</h1>
-        {/* Product name input div - start */}
+        
+        {/* Product name input */}
         <div>
           <label className="form-control w-full max-w-xs">
             <div className="label">
@@ -148,33 +187,32 @@ const DashboardProductDetails = ({
             <input
               type="text"
               className="input input-bordered w-full max-w-xs"
-              value={product?.title}
+              value={product?.title ?? ''}
               onChange={(e) =>
-                setProduct({ ...product!, title: e.target.value })
+                setProduct(prev => prev ? { ...prev, title: e.target.value } : prev)
               }
             />
           </label>
         </div>
-        {/* Product name input div - end */}
-        {/* Product price input div - start */}
 
+        {/* Price input */}
         <div>
           <label className="form-control w-full max-w-xs">
             <div className="label">
               <span className="label-text">Product price:</span>
             </div>
             <input
-              type="text"
+              type="number"
               className="input input-bordered w-full max-w-xs"
-              value={product?.price}
+              value={product?.price ?? ''}
               onChange={(e) =>
-                setProduct({ ...product!, price: Number(e.target.value) })
+                setProduct(prev => prev ? { ...prev, price: Number(e.target.value) } : prev)
               }
             />
           </label>
         </div>
-        {/* Product price input div - end */}
-        {/* Product manufacturer input div - start */}
+
+        {/* Manufacturer input */}
         <div>
           <label className="form-control w-full max-w-xs">
             <div className="label">
@@ -183,16 +221,15 @@ const DashboardProductDetails = ({
             <input
               type="text"
               className="input input-bordered w-full max-w-xs"
-              value={product?.manufacturer}
+              value={product?.manufacturer ?? ''}
               onChange={(e) =>
-                setProduct({ ...product!, manufacturer: e.target.value })
+                setProduct(prev => prev ? { ...prev, manufacturer: e.target.value } : prev)
               }
             />
           </label>
         </div>
-        {/* Product manufacturer input div - end */}
-        {/* Product slug input div - start */}
 
+        {/* Slug input */}
         <div>
           <label className="form-control w-full max-w-xs">
             <div className="label">
@@ -201,19 +238,18 @@ const DashboardProductDetails = ({
             <input
               type="text"
               className="input input-bordered w-full max-w-xs"
-              value={product?.slug && convertSlugToURLFriendly(product?.slug)}
+              value={product?.slug ? convertSlugToURLFriendly(product.slug) : ''}
               onChange={(e) =>
-                setProduct({
-                  ...product!,
+                setProduct(prev => prev ? {
+                  ...prev,
                   slug: convertSlugToURLFriendly(e.target.value),
-                })
+                } : prev)
               }
             />
           </label>
         </div>
-        {/* Product slug input div - end */}
-        {/* Product inStock select input div - start */}
 
+        {/* In stock select */}
         <div>
           <label className="form-control w-full max-w-xs">
             <div className="label">
@@ -221,9 +257,9 @@ const DashboardProductDetails = ({
             </div>
             <select
               className="select select-bordered"
-              value={product?.inStock}
+              value={product?.inStock ?? 1}
               onChange={(e) => {
-                setProduct({ ...product!, inStock: Number(e.target.value) });
+                setProduct(prev => prev ? { ...prev, inStock: Number(e.target.value) } : prev);
               }}
             >
               <option value={1}>Yes</option>
@@ -231,8 +267,8 @@ const DashboardProductDetails = ({
             </select>
           </label>
         </div>
-        {/* Product inStock select input div - end */}
-        {/* Product category select input div - start */}
+
+        {/* Category select */}
         <div>
           <label className="form-control w-full max-w-xs">
             <div className="label">
@@ -240,66 +276,57 @@ const DashboardProductDetails = ({
             </div>
             <select
               className="select select-bordered"
-              value={product?.categoryId}
+              value={product?.categoryId ?? ''}
               onChange={(e) =>
-                setProduct({
-                  ...product!,
+                setProduct(prev => prev ? {
+                  ...prev,
                   categoryId: e.target.value,
-                })
+                } : prev)
               }
             >
-              {categories &&
-                categories.map((category: Category) => (
-                  <option key={category?.id} value={category?.id}>
-                    {formatCategoryName(category?.name)}
-                  </option>
-                ))}
+              {categories?.map((category: Category) => (
+                <option key={category.id} value={category.id}>
+                  {formatCategoryName(category.name)}
+                </option>
+              ))}
             </select>
           </label>
         </div>
-        {/* Product category select input div - end */}
 
-        {/* Main image file upload div - start */}
+        {/* Main image upload */}
         <div>
           <input
             type="file"
+            accept="image/*"
             className="file-input file-input-bordered file-input-lg w-full max-w-sm"
-            onChange={(e) => {
-              const selectedFile = e.target.files[0];
-
-              if (selectedFile) {
-                uploadFile(selectedFile);
-                setProduct({ ...product!, mainImage: selectedFile.name });
-              }
-            }}
+            onChange={handleFileChange}
           />
           {product?.mainImage && (
             <Image
-              src={`/` + product?.mainImage}
-              alt={product?.title}
+              src={`/${product.mainImage}`}
+              alt={product.title}
               className="w-auto h-auto mt-2"
               width={100}
               height={100}
             />
           )}
         </div>
-        {/* Main image file upload div - end */}
-        {/* Other images file upload div - start */}
+
+        {/* Other images */}
         <div className="flex gap-x-1">
-          {otherImages &&
-            otherImages.map((image) => (
-              <Image
-                src={`/${image.image}`}
-                key={nanoid()}
-                alt="product image"
-                width={100}
-                height={100}
-                className="w-auto h-auto"
-              />
-            ))}
+          {otherImages?.map((image) => (
+            <Image
+              src={`/${image.image}`}
+              key={nanoid()}
+              alt="product image"
+              width={100}
+              height={100}
+              className="w-auto h-auto"
+            />
+          ))}
         </div>
-        {/* Other images file upload div - end */}
-        {/* Product description div - start */}
+
+        {/* Description */}
         <div>
           <label className="form-control">
             <div className="label">
@@ -307,15 +334,15 @@ const DashboardProductDetails = ({
             </div>
             <textarea
               className="textarea textarea-bordered h-24"
-              value={product?.description}
+              value={product?.description ?? ''}
               onChange={(e) =>
-                setProduct({ ...product!, description: e.target.value })
+                setProduct(prev => prev ? { ...prev, description: e.target.value } : prev)
               }
             ></textarea>
           </label>
         </div>
-        {/* Product description div - end */}
-        {/* Action buttons div - start */}
+
+        {/* Action buttons */}
         <div className="flex gap-x-2 max-sm:flex-col">
           <button
             type="button"
@@ -332,7 +359,7 @@ const DashboardProductDetails = ({
             Delete product
           </button>
         </div>
-        {/* Action buttons div - end */}
+
         <p className="text-xl max-sm:text-lg text-error">
           To delete the product you first need to delete all its records in
           orders (customer_order_product table).
