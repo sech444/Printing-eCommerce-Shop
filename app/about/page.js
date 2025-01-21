@@ -26,7 +26,7 @@ const AboutPage = () => {
         {/* Hero Section */}
         <div className="text-center mb-16 bg-gradient-to-r from-purple-600 to-indigo-600 p-12 rounded-2xl shadow-xl">
           <h1 className="text-5xl font-bold text-white mb-4 animate-fade-in">
-            About La Moniega Integrated Services Ltd
+            About La&apos;Moniega Integrated Services Ltd
           </h1>
           <p className="text-xl text-purple-100 max-w-3xl mx-auto">
             Your trusted partner in professional printing services, delivering excellence and quality since our establishment.

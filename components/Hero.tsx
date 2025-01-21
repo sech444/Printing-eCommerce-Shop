@@ -15,7 +15,7 @@ const Hero = () => {
               PRINTING JUST GOT EASY!
             </h1>
             <p className="text-white max-sm:text-sm">
-              Welcome to a new era of printing excellence, where creativity meets technology. At our premium printing service, we pride ourselves on being your go-to destination for all things print. Whether you're a small business seeking professional marketing materials, an artist looking to showcase your work, or an individual with a unique project in mind, we have the capabilities to bring your ideas to life.
+              Welcome to a new era of printing excellence, where creativity meets technology. At our premium printing service, we pride ourselves on being your go-to destination for all things print. Whether you&apos;re a small business seeking professional marketing materials, an artist looking to showcase your work, or an individual with a unique project in mind, we have the capabilities to bring your ideas to life.
             </p>
             {/* <p className="text-white max-sm:text-sm">
               Our state-of-the-art technology ensures that every print is vibrant, precise, and true to your vision. We offer a diverse range of printing services, including high-quality business cards, eye-catching flyers, stunning posters, and custom merchandise. With our expert craftsmanship and attention to detail, you can trust that each piece is crafted to perfection.

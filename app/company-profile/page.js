@@ -19,7 +19,7 @@ export default function CompanyProfile() {
             About Us
           </h2>
           <p className="text-gray-700 leading-relaxed">
-            La'Moniega Integrated Services Ltd is a premier provider of professional printing solutions, dedicated to delivering
+            La&apos;Moniega Integrated Services Ltd is a premier provider of professional printing solutions, dedicated to delivering
             high-quality services that meet the unique needs of our diverse clientele. Established with a passion for excellence, 
             we have built a reputation for reliability, innovation, and precision in every project we undertake.
           </p>

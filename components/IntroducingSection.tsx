@@ -18,7 +18,7 @@ const IntroducingSection = () => {
 
       <div className="text-center flex flex-col gap-y-5 items-center">
         <h2 className="text-white text-8xl font-extrabold text-center mb-2 max-md:text-6xl max-[480px]:text-4xl">
-          INTRODUCING <span className="text-black"> LA'</span><span className="text-blue-600">MONEIQA</span><br />
+          INTRODUCING <span className="text-black"> LA&apos;</span><span className="text-blue-600">MONEIQA</span><br />
           <span className="text-black">Integrated Services Ltd</span>
         </h2>
         <div>
