@@ -48,7 +48,7 @@ const DashboardProductDetails = ({
       method: "DELETE",
     };
     try {
-      const response = await fetch(`http://localhost:3001/api/products/${id}`, requestOptions);
+      const response = await fetch(`http://localhost:8080/api/products/${id}`, requestOptions);
       if (response.status !== 204) {
         if (response.status === 400) {
           toast.error("Cannot delete the product because of foreign key constraint");
@@ -84,7 +84,7 @@ const DashboardProductDetails = ({
     };
 
     try {
-      const response = await fetch(`http://localhost:3001/api/products/${id}`, requestOptions);
+      const response = await fetch(`http://localhost:8080/api/products/${id}`, requestOptions);
       if (response.status === 200) {
         const data = await response.json();
         toast.success("Product successfully updated");
@@ -102,7 +102,7 @@ const DashboardProductDetails = ({
     formData.append("uploadedFile", file);
 
     try {
-      const response = await fetch("http://localhost:3001/api/main-image", {
+      const response = await fetch("http://localhost:8080/api/main-image", {
         method: "POST",
         body: formData,
       });
@@ -122,11 +122,11 @@ const DashboardProductDetails = ({
   // fetching main product data including other product images
   const fetchProductData = useCallback(async () => {
     try {
-      const response = await fetch(`http://localhost:3001/api/products/${id}`);
+      const response = await fetch(`http://localhost:8080/api/products/${id}`);
       const data = await response.json();
       setProduct(data);
 
-      const imagesData = await fetch(`http://localhost:3001/api/images/${id}`, {
+      const imagesData = await fetch(`http://localhost:8080/api/images/${id}`, {
         cache: "no-store",
       });
       const images = await imagesData.json();
@@ -140,7 +140,7 @@ const DashboardProductDetails = ({
   // fetching all product categories
   const fetchCategories = useCallback(async () => {
     try {
-      const response = await fetch(`http://localhost:3001/api/categories`);
+      const response = await fetch(`http://localhost:8080/api/categories`);
       const data = await response.json();
       setCategories(data);
     } catch (error) {
