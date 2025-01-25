@@ -5,7 +5,13 @@
   - Added the required column `country` to the `Customer_order` table without a default value. This is not possible if the table is not empty.
 
 */
+-- -- AlterTable
+-- ALTER TABLE `customer_order` ADD COLUMN `city` VARCHAR(191) NOT NULL,
+--     ADD COLUMN `country` VARCHAR(191) NOT NULL,
+--     ADD COLUMN `orderNotice` VARCHAR(191) NULL;
+
 -- AlterTable
-ALTER TABLE `customer_order` ADD COLUMN `city` VARCHAR(191) NOT NULL,
-    ADD COLUMN `country` VARCHAR(191) NOT NULL,
-    ADD COLUMN `orderNotice` VARCHAR(191) NULL;
+ALTER TABLE "Customer_order" 
+ADD COLUMN "city" TEXT NOT NULL,
+ADD COLUMN "country" TEXT NOT NULL,
+ADD COLUMN "orderNotice" TEXT NULL;

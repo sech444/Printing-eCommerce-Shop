@@ -1,2 +1,10 @@
+-- -- AddForeignKey
+-- ALTER TABLE `Product` ADD CONSTRAINT `Product_categoryId_fkey` FOREIGN KEY (`categoryId`) REFERENCES `Category`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
+
 -- AddForeignKey
-ALTER TABLE `Product` ADD CONSTRAINT `Product_categoryId_fkey` FOREIGN KEY (`categoryId`) REFERENCES `Category`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "Product" 
+ADD CONSTRAINT "Product_categoryId_fkey" 
+FOREIGN KEY ("categoryId") 
+REFERENCES "Category"("id") 
+ON DELETE RESTRICT 
+ON UPDATE CASCADE;

@@ -8,7 +8,7 @@
 DROP TABLE `order`;
 
 -- CreateTable
-CREATE TABLE `Customer_order` (
+CREATE TABLE "customer_orders" (
     `id` VARCHAR(191) NOT NULL,
     `name` VARCHAR(191) NOT NULL,
     `lastname` VARCHAR(191) NOT NULL,

@@ -147,8 +147,7 @@ npm install
 
 ```
 npx prisma migrate dev
-
-npx prisma migrate dev --name add-featured-to-product
+ 
 ```
 
 <p>11. Next is to insert demo data. To do it you need to go to the server/utills folder and call insertDemoData.js:</p>

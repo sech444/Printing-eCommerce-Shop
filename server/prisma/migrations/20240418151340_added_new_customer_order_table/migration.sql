@@ -4,23 +4,23 @@
   - You are about to drop the `order` table. If the table is not empty, all the data it contains will be lost.
 
 */
--- DropTable
-DROP TABLE `order`;
 
+-- CreateIndex
+CREATE UNIQUE INDEX "Category_name_key" ON "Category"("name");
 -- CreateTable
-CREATE TABLE `Customer_order` (
-    `id` VARCHAR(191) NOT NULL,
-    `name` VARCHAR(191) NOT NULL,
-    `lastname` VARCHAR(191) NOT NULL,
-    `phone` VARCHAR(191) NOT NULL,
-    `email` VARCHAR(191) NOT NULL,
-    `company` VARCHAR(191) NOT NULL,
-    `adress` VARCHAR(191) NOT NULL,
-    `apartment` VARCHAR(191) NOT NULL,
-    `postalCode` VARCHAR(191) NOT NULL,
-    `dateTime` DATETIME(3) NULL DEFAULT CURRENT_TIMESTAMP(3),
-    `status` VARCHAR(191) NOT NULL,
-    `total` INTEGER NOT NULL,
+CREATE TABLE "Customer_order" (
+    "id" TEXT NOT NULL,
+    "name" TEXT NOT NULL,
+    "lastname" TEXT NOT NULL,
+    "phone" TEXT NOT NULL,
+    "email" TEXT NOT NULL,
+    "company" TEXT NOT NULL,
+    "adress" TEXT NOT NULL,
+    "apartment" TEXT NOT NULL,
+    "postalCode" TEXT NOT NULL,
+    "dateTime" TIMESTAMP(3) NULL DEFAULT CURRENT_TIMESTAMP(3),
+    "status" TEXT NOT NULL,
+    "total" INTEGER NOT NULL,
 
-    PRIMARY KEY (`id`)
-) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+    CONSTRAINT "Customer_order_pkey" PRIMARY KEY ("id")
+);

@@ -1,0 +1,67 @@
+version: '3.8'
+
+networks:
+  app_network:
+    driver: bridge
+
+services:
+  db:
+    image: mysql:8.0
+    ports:
+      - '3306:3306'
+    environment:
+      MYSQL_ROOT_PASSWORD: password4545
+      MYSQL_DATABASE: singitronic_nextjs
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    command:
+      - --default-authentication-plugin=mysql_native_password
+      - --bind-address=0.0.0.0  # Allow external connections
+    volumes:
+      - singitronic_mysql_data:/var/lib/mysql
+    networks:
+      - app_network
+
+  backend:
+    build:
+      context: .
+      dockerfile: ./server/Dockerfile
+    ports:
+      - '5000:5000'
+    environment:
+      - DATABASE_URL=mysql://root:password4545@db:3306/singitronic_nextjs
+      - DEBUG=prisma:*
+    depends_on:
+      db:
+        condition: service_healthy
+    command: 
+      - sh
+      - -c
+      - |
+        apt-get update && 
+        apt-get install -y netcat-openbsd mysql-client && 
+        until nc -z db 3306; do 
+          echo "Waiting for database to be ready..."; 
+          sleep 2; 
+        done
+        npx prisma migrate dev
+        npm run start
+    networks:
+      - app_network
+
+  frontend:
+    build:
+      context: .
+      dockerfile: ./Dockerfile
+    ports:
+      - '3000:3000'
+    depends_on:
+      - backend
+    networks:
+      - app_network
+
+volumes:
+  singitronic_mysql_data:
