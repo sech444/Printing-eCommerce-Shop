@@ -12,13 +12,14 @@
 
 import React, { useEffect, useState } from "react";
 import Link from "next/link";
+const apiUrl = process.env.NEXT_PUBLIC_API_URL;
 
 const AdminOrders = () => {
   const [orders, setOrders] = useState<Order[]>([]);
 
   useEffect(() => {
     const fetchOrders = async () => {
-      const response = await fetch("http://localhost:5000/api/orders");
+      const response = await fetch("${apiUrl}/api/orders");
       const data = await response.json();
       setOrders(data);
     };

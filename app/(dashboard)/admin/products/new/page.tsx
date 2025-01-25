@@ -4,6 +4,7 @@ import { convertCategoryNameToURLFriendly as convertSlugToURLFriendly } from "@/
 import Image from "next/image";
 import React, { useEffect, useState } from "react";
 import toast from "react-hot-toast";
+const apiUrl = process.env.NEXT_PUBLIC_API_URL;
 
 const AddNewProduct = () => {
   const [product, setProduct] = useState<{
@@ -43,7 +44,7 @@ const AddNewProduct = () => {
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(product),
     };
-    fetch(`http://localhost:5000/api/products`, requestOptions)
+    fetch(`${apiUrl}/api/products`, requestOptions)
       .then((response) => {
         if (response.status === 201) {
           return response.json();
@@ -74,7 +75,7 @@ const AddNewProduct = () => {
     formData.append("uploadedFile", file);
 
     try {
-      const response = await fetch("http://localhost:5000/api/main-image", {
+      const response = await fetch("${apiUrl}/api/main-image", {
         method: "POST",
         body: formData,
       });
@@ -90,7 +91,7 @@ const AddNewProduct = () => {
   };
 
   const fetchCategories = async () => {
-    fetch(`http://localhost:5000/api/categories`)
+    fetch(`${apiUrl}/api/categories`)
       .then((res) => {
         return res.json();
       })

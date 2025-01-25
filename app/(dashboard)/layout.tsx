@@ -2,6 +2,7 @@ import { useSession } from "next-auth/react";
 import { getServerSession } from "next-auth/next";
 import { redirect } from "next/navigation";
 import toast from "react-hot-toast";
+const apiUrl = process.env.NEXT_PUBLIC_API_URL;
 
 export default async function Layout({
   children,
@@ -18,7 +19,7 @@ export default async function Layout({
 
   let email: string = await session?.user?.email;
   
-  const res = await fetch(`http://localhost:5000/api/users/email/${email}`);
+  const res = await fetch(`${apiUrl}/api/users/email/${email}`);
   const data = await res.json();
   // redirecting user to the home page if not admin
   if (data.role === "user") {

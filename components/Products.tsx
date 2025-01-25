@@ -10,6 +10,7 @@
 
 import React from "react";
 import ProductItem from "./ProductItem";
+const apiUrl = process.env.NEXT_PUBLIC_API_URL;
 
 const Products = async ({ slug }: any) => {
   // getting all data from URL slug and preparing everything for sending GET request
@@ -39,7 +40,7 @@ const Products = async ({ slug }: any) => {
 
   // sending API request with filtering, sorting and pagination for getting all products
   const data = await fetch(
-    `http://localhost:5000/api/products?filters[price][$lte]=${
+    `${apiUrl}/api/products?filters[price][$lte]=${
       slug?.searchParams?.price || 3000
     }&filters[rating][$gte]=${
       Number(slug?.searchParams?.rating) || 0
@@ -54,7 +55,7 @@ const Products = async ({ slug }: any) => {
 
   /*
     const req = await fetch(
-    `http://localhost:1337/api/products?populate=*&filters[price][$lte]=${
+    `http://backend:1337/api/products?populate=*&filters[price][$lte]=${
       searchParams?.price || 1000
     }${searchParams.women === "true" ? "&filters[category][$eq]=women" : ""}${searchParams.womenNewEdition === "true" ? "&filters[category][$eq]=women%20new%20edition" : ""}&filters[rating][$gte]=${
       searchParams?.rating || 1

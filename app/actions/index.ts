@@ -1,9 +1,10 @@
 'use server'
 
 import { revalidateTag } from "next/cache";
+const apiUrl = process.env.NEXT_PUBLIC_API_URL;
 
 export async function deleteWishItem(id: string){
-  await fetch(`http://localhost:5000/api/wishlist/${id}`, {
+  await fetch(`${apiUrl}/api/wishlist/${id}`, {
     method: "DELETE",
   });
 }

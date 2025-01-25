@@ -6,6 +6,7 @@ import Link from "next/link";
 import { useParams, useRouter } from "next/navigation";
 import React, { useEffect, useState } from "react";
 import toast from "react-hot-toast";
+const apiUrl = process.env.NEXT_PUBLIC_API_URL;
 
 interface OrderProduct {
   id: string;
@@ -52,7 +53,7 @@ const AdminSingleOrder = () => {
   useEffect(() => {
     const fetchOrderData = async () => {
       const response = await fetch(
-        `http://localhost:5000/api/orders/${params?.id}`
+        `${apiUrl}/api/orders/${params?.id}`
       );
       const data: Order = await response.json();
       setOrder(data);
@@ -60,7 +61,7 @@ const AdminSingleOrder = () => {
 
     const fetchOrderProducts = async () => {
       const response = await fetch(
-        `http://localhost:5000/api/order-product/${params?.id}`
+        `${apiUrl}/api/order-product/${params?.id}`
       );
       const data: OrderProduct[] = await response.json();
       setOrderProducts(data);
@@ -98,7 +99,7 @@ const AdminSingleOrder = () => {
         return;
       }
 
-      fetch(`http://localhost:5000/api/orders/${order?.id}`, {
+      fetch(`${apiUrl}/api/orders/${order?.id}`, {
         method: "PUT", // or 'PUT'
         headers: {
           "Content-Type": "application/json",
@@ -126,11 +127,11 @@ const AdminSingleOrder = () => {
     };
 
     fetch(
-      `http://localhost:5000/api/order-product/${order?.id}`,
+      `${apiUrl}/api/order-product/${order?.id}`,
       requestOptions
     ).then((response) => {
       fetch(
-        `http://localhost:5000/api/orders/${order?.id}`,
+        `${apiUrl}/api/orders/${order?.id}`,
         requestOptions
       ).then((response) => {
         toast.success("Order deleted successfully");

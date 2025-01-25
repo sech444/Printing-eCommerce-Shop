@@ -14,12 +14,13 @@ import Image from "next/image";
 import Link from "next/link";
 import React, { useEffect, useState } from "react";
 import CustomButton from "./CustomButton";
+const apiUrl = process.env.NEXT_PUBLIC_API_URL;
 
 const DashboardProductTable = () => {
   const [products, setProducts] = useState<Product[]>([]);
 
   useEffect(() => {
-    fetch("http://localhost:5000/api/products?mode=admin", {cache: "no-store"})
+    fetch("${apiUrl}/api/products?mode=admin", {cache: "no-store"})
       .then((res) => {
         return res.json();
       })
