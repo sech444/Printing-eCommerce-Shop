@@ -8,10 +8,10 @@
 // Output: products grid
 // *********************
 
-import React from "react";
-import ProductItem from "./ProductItem";
-import Heading from "./Heading";
-const apiUrl = process.env.NEXT_PUBLIC_API_URL;
+// import React from "react";
+// import ProductItem from "./ProductItem";
+// import Heading from "./Heading";
+// const apiUrl = process.env.NEXT_PUBLIC_API_URL;
 
 
 // const ProductsSection = async () => {
@@ -34,27 +34,30 @@ const apiUrl = process.env.NEXT_PUBLIC_API_URL;
 
 // export default ProductsSection;
 
+import React from "react";
+import ProductItem from "./ProductItem";
+import Heading from "./Heading";
+
+const apiUrl = process.env.NEXT_PUBLIC_API_URL;
+
 const ProductsSection = async () => {
   try {
-    // Wrap fetch in try-catch to handle network or API errors
     const response = await fetch(`${apiUrl}/api/products`, {
-      // Add error handling options
       headers: {
         'Content-Type': 'application/json'
       },
-      // Optional: add timeout
       signal: AbortSignal.timeout(5000)
     });
 
-    // Check if the response is OK (status in 200-299 range)
     if (!response.ok) {
       throw new Error(`HTTP error! status: ${response.status}`);
     }
 
-    // Safely parse JSON
     const products = await response.json();
+    
+    // Console log the products
+    console.log('Fetched Products:', products);
 
-    // Validate products data
     if (!Array.isArray(products) || products.length === 0) {
       return (
         <div className="text-red-500 p-4">
@@ -76,7 +79,6 @@ const ProductsSection = async () => {
       </div>
     );
   } catch (error) {
-    // Comprehensive error handling
     console.error('Failed to fetch products:', error);
     
     return (
