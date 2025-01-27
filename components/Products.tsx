@@ -1,7 +1,7 @@
 // *********************
 // Role of the component: Showing products on the shop page with applied filter and sort
 // Name of the component: Products.tsx
-// Developer: Aleksandar Kuzmanovic
+// Developer: Moses Sechere
 // Version: 1.0
 // Component call: <Products slug={slug} />
 // Input parameters: { slug }: any
@@ -79,3 +79,5 @@ const Products = async ({ slug }: any) => {
 };
 
 export default Products;
+
+

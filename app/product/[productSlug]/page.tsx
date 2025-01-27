@@ -32,11 +32,16 @@ const SingleProductPage = async ({ params }: SingleProductPageProps) => {
     // Corrected API request for a single product with a given product slug
     const productRes = await fetch(`${apiUrl}/api/slugs/${params.productSlug}`, {
       method: "GET",
-      headers: {
-        Authorization: `Bearer ${process.env.NEXT_PUBLIC_API_KEY}`,
-        "Content-Type": "application/json",
-      },
-    });
+    //   headers: {
+    //     Authorization: `Bearer ${process.env.NEXT_PUBLIC_API_KEY}`,
+    //     "Content-Type": "application/json",
+    //   },
+    // });
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    signal: AbortSignal.timeout(15000)
+  });
     if (!productRes.ok) throw new Error("Failed to fetch product data");
     const product = await productRes.json();
 
@@ -44,9 +49,9 @@ const SingleProductPage = async ({ params }: SingleProductPageProps) => {
     const imagesRes = await fetch(`${apiUrl}/api/images/${product.id}`, {
       method: "GET",
       headers: {
-        Authorization: `Bearer ${process.env.NEXT_PUBLIC_API_KEY}`,
-        "Content-Type": "application/json",
+        'Content-Type': 'application/json'
       },
+      signal: AbortSignal.timeout(15000)
     });
     if (!imagesRes.ok) throw new Error("Failed to fetch product images");
     const images: ImageItem[] = await imagesRes.json();
@@ -60,6 +65,7 @@ const SingleProductPage = async ({ params }: SingleProductPageProps) => {
         <div className="max-w-screen-2xl mx-auto">
           <div className="flex justify-center gap-x-16 pt-10 max-lg:flex-col items-center gap-y-5 px-5">
             {/* Product Images */}
+           
             <div>
               <Image
                 src={product?.mainImage ? `/${product.mainImage}` : "/product_placeholder.jpg"}
