@@ -58,7 +58,7 @@ const ProductsSection = async () => {
       headers: {
         'Content-Type': 'application/json'
       },
-      signal: AbortSignal.timeout(5000)
+      signal: AbortSignal.timeout(15000)
     });
 
     if (!response.ok) {
