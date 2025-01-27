@@ -65,7 +65,10 @@ const app = express();
 // Middleware
 app.use(express.json());
 app.use(cors({
-    origin: "*",
+    origin: [
+        'http://localhost:3000', 
+        'https://printing-e-commerce-shop-4cwykq2gi-sech444s-projects.vercel.app'
+    ],
     methods: ["GET", "POST", "PUT", "DELETE"],
     allowedHeaders: ["Content-Type", "Authorization"],
 }));

@@ -1,3 +1,5 @@
+// Printing-eCommerce-Shop/app/api/register/route.ts
+
 import prisma from "@/utils/db";
 import bcrypt from "bcryptjs";
 import { nanoid } from "nanoid";

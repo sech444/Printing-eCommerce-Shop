@@ -8,10 +8,11 @@
 // Output: Product item component that contains product image, title, link to the single product page, price, button...
 // *********************
 
+// Printing-eCommerce-Shop/components/ProductItem.tsx
+
 import Image from "next/image";
 import React from "react";
 import Link from "next/link";
-// import ProductItemRating from "./ProductItemRating";
 
 const ProductItem = ({
   product,
@@ -53,16 +54,8 @@ const ProductItem = ({
             : "text-lg text-white font-semibold"
         }
       >
-        {/* ₦{product.price} */}
+        {/* ₦{product.price.toLocaleString("en-NG")} */}
       </p>
-
-      {/* <ProductItemRating productRating={product?.rating} /> */}
-      {/* <Link
-        href={`/product/${product?.slug}`}
-        className="block flex justify-center items-center w-full uppercase bg-white px-0 py-2 text-base border border-black border-gray-300 font-bold text-blue-600 shadow-sm hover:bg-black hover:bg-gray-100 focus:outline-none focus:ring-2"
-      >
-        <p>View product</p>
-      </Link> */}
     </div>
   );
 };
