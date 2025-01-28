@@ -119,7 +119,7 @@ const ProductItem = ({
       >
         {product.title || "Untitled Product"}
       </Link>
-      <p
+      {/* <p
         className={
           color === "black"
             ? "text-lg text-black font-semibold"
@@ -127,7 +127,7 @@ const ProductItem = ({
         }
       >
         {product.price ? `₦${product.price.toLocaleString("en-NG")}` : "Price not available"}
-      </p>
+      </p> */}
     </div>
   );
 };
