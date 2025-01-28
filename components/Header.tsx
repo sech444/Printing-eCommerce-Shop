@@ -19,6 +19,7 @@ import { FaBell } from "react-icons/fa6";
 
 import CartElement from "./CartElement";
 import HeartElement from "./HeartElement";
+import HomeBtn  from "./HomeBtn";
 import { signOut, useSession } from "next-auth/react";
 import toast from "react-hot-toast";
 import { useWishlistStore } from "@/app/_zustand/wishlistStore";
@@ -82,6 +83,7 @@ const Header = () => {
           </Link>
           <SearchInput />
           <div className="flex gap-x-10">
+            <HomeBtn />
             <HeartElement wishQuantity={wishQuantity} />
             <CartElement />
           </div>
