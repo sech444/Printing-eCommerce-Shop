@@ -1,32 +1,19 @@
 version: '3.8'
-networks:
-  app_network:
-    driver: bridge
 
 services:
-  backend:
-    build:
-      context: ./server
-      dockerfile: Dockerfile
-    volumes:
-      - ./server:/usr/src/app
-      - /usr/src/app/node_modules 
-    ports:
-      - "5000:5000"
+  postgres:
+    image: postgres:15
+    container_name: printing_ecommerce_postgres
     environment:
-      - DATABASE_URL=${DATABASE_URL}
-    networks:
-      - app_network
-
-  frontend:
-    build:
-      context: .
-      dockerfile: Dockerfile
-    env_file:
-      - .env.${ENV:-production}
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: printing_ecommerce_db
     ports:
-      - "3000:3000"
-    depends_on:
-      - backend
-    networks:
-      - app_network
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./data/postgres:/docker-entrypoint-initdb.d
+    restart: unless-stopped
+
+volumes:
+  postgres_data:

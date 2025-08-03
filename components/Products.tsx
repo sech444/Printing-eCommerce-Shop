@@ -1,16 +1,27 @@
-// *********************
-// Role of the component: Showing products on the shop page with applied filter and sort
-// Name of the component: Products.tsx
-// Developer: Moses Sechere
-// Version: 1.0
-// Component call: <Products slug={slug} />
-// Input parameters: { slug }: any
-// Output: products grid
-// *********************
+
 
 import React from "react";
 import ProductItem from "./ProductItem";
 const apiUrl = process.env.NEXT_PUBLIC_API_URL;
+
+// Function to map URL slugs to database category names
+const mapSlugToCategoryName = (slug: string): string => {
+  const categoryMap: { [key: string]: string } = {
+    "Printing-Services": "Printing-Services",
+    "Banners-Printing": "Banners-Printing", 
+    "T-Shirt-Printing": "T-Shirt-Printing",
+    "Book-Printing": "Book-Printing",
+    "Custom-Printing": "Custom-Printing",
+    "Coffee-Mug-Printing": "Coffee-Mug-Printing",
+    "Business-Card": "Business-Card",
+    "printers": "Printers",
+    "Printers": "Printers",
+    "Car-Branding": "Car-Branding",
+    "DI-Printing": "DI-Printing"
+  };
+  
+  return categoryMap[slug] || slug;
+};
 
 const Products = async ({ slug }: any) => {
   // getting all data from URL slug and preparing everything for sending GET request
@@ -38,20 +49,46 @@ const Products = async ({ slug }: any) => {
     stockMode = "gt";
   }
 
+  // Map the URL slug to the correct category name
+  const categoryName = slug?.params?.slug?.length > 0 
+    ? mapSlugToCategoryName(slug.params.slug[0]) 
+    : "";
+
+  console.log('Category filtering:', {
+    originalSlug: slug?.params?.slug?.[0],
+    mappedCategory: categoryName
+  });
+
+  // Build the API URL with proper filtering
+  const priceFilter = slug?.searchParams?.price || 3000;
+  const ratingFilter = Number(slug?.searchParams?.rating) || 0;
+  const sortParam = slug?.searchParams?.sort || "";
+  
+  // Build URL parts
+  const baseUrl = `${apiUrl}/api/products`;
+  const priceParam = `filters[price][$lte]=${priceFilter}`;
+  const ratingParam = `filters[rating][$gte]=${ratingFilter}`;
+  const stockParam = "filters[inStock][$" + stockMode + "]=1";
+  const categoryParam = categoryName ? `filters[category][$equals]=${categoryName}` : "";
+  const sortParamFull = sortParam ? `sort=${sortParam}` : "";
+  const pageParam = `page=${page}`;
+  
+  // Combine all parameters
+  const params = [priceParam, ratingParam, stockParam, categoryParam, sortParamFull, pageParam]
+    .filter(param => param !== "")
+    .join("&");
+  
+  const apiUrl_full = `${baseUrl}?${params}`;
+
+  console.log('Full API URL:', apiUrl_full);
+
   // sending API request with filtering, sorting and pagination for getting all products
-  const data = await fetch(
-    `${apiUrl}/api/products?filters[price][$lte]=${
-      slug?.searchParams?.price || 3000
-    }&filters[rating][$gte]=${
-      Number(slug?.searchParams?.rating) || 0
-    }&filters[inStock][$${stockMode}]=1&${
-      slug?.params?.slug?.length > 0
-        ? `filters[category][$equals]=${slug?.params?.slug}&`
-        : ""
-    }sort=${slug?.searchParams?.sort}&page=${page}`
-  );
+  const data = await fetch(apiUrl_full);
 
   const products = await data.json();
+
+  console.log('Products API URL:', data.url);
+  console.log('Products found:', products.length);
 
   /*
     const req = await fetch(

@@ -1,12 +1,3 @@
-// *********************
-// Role of the component: IntroducingSection with the text "Introducing LA MONEIQA"
-// Name of the component: IntroducingSection.tsx
-// Developer: Moses Sechere
-// Version: 1.0
-// Component call: <IntroducingSection />
-// Input parameters: no input parameters
-// Output: Section with the text "Introducing LA MONEIQA" and button
-// *********************
 
 import Link from "next/link";
 import React from "react";
