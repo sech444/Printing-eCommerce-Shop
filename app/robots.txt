@@ -16,4 +16,4 @@ Disallow: /login
 Disallow: /register
 
 # Sitemap location
-Sitemap: https://lamoniega-printing.vercel.app/sitemap.xml
+Sitemap: https://www.lamoneiqa.ng/sitemap.xml

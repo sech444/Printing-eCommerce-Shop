@@ -33,9 +33,9 @@
 
 ### 1. **Google Search Console Setup**
 1. Go to [Google Search Console](https://search.google.com/search-console/)
-2. Add your website: `https://lamoniega-printing.vercel.app`
+2. Add your website: `https://www.lamoneiqa.ng`
 3. Verify ownership using the meta tag in `layout.tsx` (replace `your-google-verification-code`)
-4. Submit your sitemap: `https://lamoniega-printing.vercel.app/sitemap.xml`
+4. Submit your sitemap: `https://www.lamoneiqa.ng/sitemap.xml`
 
 ### 2. **Google My Business**
 1. Create a Google My Business profile

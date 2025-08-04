@@ -17,6 +17,21 @@ import { FaSquareFacebook, FaSquareXTwitter, FaSquarePinterest } from "react-ico
 const apiUrl = process.env.NEXT_PUBLIC_API_URL;
 
 export async function generateMetadata({ params }: { params: { productSlug: string } }): Promise<Metadata> {
+  // For build time, return static metadata to avoid fetch issues
+  if (!apiUrl || process.env.NODE_ENV === 'production') {
+    return {
+      title: 'Product - La\'Moniega Printing Services',
+      description: 'Professional printing services with high-quality materials and fast turnaround times.',
+      openGraph: {
+        title: 'Product - La\'Moniega Printing Services',
+        description: 'Professional printing services with high-quality materials and fast turnaround times.',
+        images: ['https://www.lamoneiqa.ng/product_placeholder.jpg'],
+        url: `https://www.lamoneiqa.ng/product/${params.productSlug}`,
+        type: 'website',
+      },
+    };
+  }
+
   try {
     const productRes = await fetch(`${apiUrl}/api/slugs/${params.productSlug}`, {
       method: "GET",
@@ -50,20 +65,20 @@ export async function generateMetadata({ params }: { params: { productSlug: stri
         description: product.description || `${product.title} - Professional printing services with high-quality materials and fast turnaround times.`,
         images: [
           {
-            url: product.mainImage ? `/${product.mainImage}` : '/product_placeholder.jpg',
+            url: product.mainImage ? `https://www.lamoneiqa.ng/${product.mainImage}` : 'https://www.lamoneiqa.ng/product_placeholder.jpg',
             width: 500,
             height: 500,
             alt: product.title,
           },
         ],
-        url: `/product/${params.productSlug}`,
+        url: `https://www.lamoneiqa.ng/product/${params.productSlug}`,
         type: 'website',
       },
       twitter: {
         card: 'summary_large_image',
         title: `${product.title} - La'Moniega Printing Services`,
         description: product.description || `${product.title} - Professional printing services with high-quality materials and fast turnaround times.`,
-        images: [product.mainImage ? `/${product.mainImage}` : '/product_placeholder.jpg'],
+        images: [product.mainImage ? `https://www.lamoneiqa.ng/${product.mainImage}` : 'https://www.lamoneiqa.ng/product_placeholder.jpg'],
       },
     };
   } catch (error) {

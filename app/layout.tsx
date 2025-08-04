@@ -40,20 +40,17 @@ export const metadata: Metadata = {
     address: false,
     telephone: false,
   },
-  metadataBase: process.env.NODE_ENV === 'production' 
-    ? new URL('https://lamoniega-printing.vercel.app')
-    : new URL('http://localhost:3000'),
   alternates: {
-    canonical: '/',
+    canonical: 'https://www.lamoneiqa.ng/',
   },
   openGraph: {
     title: "La'Moniega Integrated Services Ltd - Professional Printing Services",
     description: "Professional printing services including business cards, banners, books, custom merchandise, embroidery, and digital printing. Quality printing solutions for businesses and individuals.",
-    url: 'https://lamoniega-printing.vercel.app',
+    url: 'https://www.lamoneiqa.ng',
     siteName: "La'Moniega Printing Services",
     images: [
       {
-        url: '/logo v1.png',
+        url: 'https://www.lamoneiqa.ng/logo v1.png',
         width: 1200,
         height: 630,
         alt: "La'Moniega Integrated Services Ltd Logo",

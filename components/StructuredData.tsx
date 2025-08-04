@@ -14,8 +14,8 @@ export default function StructuredData({ type = 'organization', data }: Structur
           "@type": "Organization",
           "name": "La'Moniega Integrated Services Ltd",
           "description": "Professional printing services including business cards, banners, books, custom merchandise, embroidery, and digital printing.",
-          "url": "https://lamoniega-printing.vercel.app",
-          "logo": "https://lamoniega-printing.vercel.app/logo v1.png",
+          "url": "https://www.lamoneiqa.ng",
+          "logo": "https://www.lamoneiqa.ng/logo v1.png",
           "contactPoint": {
             "@type": "ContactPoint",
             "contactType": "customer service",
@@ -85,12 +85,12 @@ export default function StructuredData({ type = 'organization', data }: Structur
           "@type": "WebSite",
           "name": "La'Moniega Integrated Services Ltd",
           "description": "Professional printing services including business cards, banners, books, custom merchandise, embroidery, and digital printing.",
-          "url": "https://lamoniega-printing.vercel.app",
+          "url": "https://www.lamoneiqa.ng",
           "potentialAction": {
             "@type": "SearchAction",
             "target": {
               "@type": "EntryPoint",
-              "urlTemplate": "https://lamoniega-printing.vercel.app/search?q={search_term_string}"
+              "urlTemplate": "https://www.lamoneiqa.ng/search?q={search_term_string}"
             },
             "query-input": "required name=search_term_string"
           }

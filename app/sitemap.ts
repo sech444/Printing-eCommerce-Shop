@@ -1,7 +1,7 @@
 import { MetadataRoute } from 'next'
 
 export default function sitemap(): MetadataRoute.Sitemap {
-  const baseUrl = 'https://lamoniega-printing.vercel.app'
+  const baseUrl = 'https://www.lamoneiqa.ng'
   
   // Static pages
   const staticPages = [
