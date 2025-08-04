@@ -40,7 +40,9 @@ export const metadata: Metadata = {
     address: false,
     telephone: false,
   },
-  metadataBase: new URL('https://lamoniega-printing.vercel.app'),
+  metadataBase: process.env.NODE_ENV === 'production' 
+    ? new URL('https://lamoniega-printing.vercel.app')
+    : new URL('http://localhost:3000'),
   alternates: {
     canonical: '/',
   },

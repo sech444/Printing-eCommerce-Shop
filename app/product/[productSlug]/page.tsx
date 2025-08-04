@@ -10,10 +10,70 @@ import {
 } from "@/components";
 import Image from "next/image";
 import { notFound } from "next/navigation";
+import { Metadata } from "next";
 import React from "react";
 import { FaSquareFacebook, FaSquareXTwitter, FaSquarePinterest } from "react-icons/fa6";
 
 const apiUrl = process.env.NEXT_PUBLIC_API_URL;
+
+export async function generateMetadata({ params }: { params: { productSlug: string } }): Promise<Metadata> {
+  try {
+    const productRes = await fetch(`${apiUrl}/api/slugs/${params.productSlug}`, {
+      method: "GET",
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      next: { revalidate: 3600 } // Cache for 1 hour
+    });
+
+    if (!productRes.ok) {
+      return {
+        title: 'Product Not Found',
+        description: 'The requested product could not be found.',
+      };
+    }
+
+    const product = await productRes.json();
+
+    if (!product || product.error) {
+      return {
+        title: 'Product Not Found',
+        description: 'The requested product could not be found.',
+      };
+    }
+
+    return {
+      title: `${product.title} - La'Moniega Printing Services`,
+      description: product.description || `${product.title} - Professional printing services with high-quality materials and fast turnaround times.`,
+      openGraph: {
+        title: `${product.title} - La'Moniega Printing Services`,
+        description: product.description || `${product.title} - Professional printing services with high-quality materials and fast turnaround times.`,
+        images: [
+          {
+            url: product.mainImage ? `/${product.mainImage}` : '/product_placeholder.jpg',
+            width: 500,
+            height: 500,
+            alt: product.title,
+          },
+        ],
+        url: `/product/${params.productSlug}`,
+        type: 'website',
+      },
+      twitter: {
+        card: 'summary_large_image',
+        title: `${product.title} - La'Moniega Printing Services`,
+        description: product.description || `${product.title} - Professional printing services with high-quality materials and fast turnaround times.`,
+        images: [product.mainImage ? `/${product.mainImage}` : '/product_placeholder.jpg'],
+      },
+    };
+  } catch (error) {
+    console.error('Error generating metadata:', error);
+    return {
+      title: 'Product - La\'Moniega Printing Services',
+      description: 'Professional printing services with high-quality materials and fast turnaround times.',
+    };
+  }
+}
 
 interface ImageItem {
   imageID: string;
