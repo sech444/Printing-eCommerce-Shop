@@ -7,9 +7,6 @@ import Providers from "@/Providers";
 import { getServerSession } from "next-auth";
 import 'svgmap/dist/svgMap.min.css';
 
-
-
-
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
@@ -20,7 +17,7 @@ export const metadata: Metadata = {
   description: "Professional printing services including business cards, banners, books, custom merchandise, embroidery, and digital printing. Quality printing solutions for businesses and individuals.",
   keywords: [
     "printing services",
-    "business card printing",
+    "business card printing", 
     "banner printing",
     "book printing",
     "custom merchandise",
@@ -35,51 +32,9 @@ export const metadata: Metadata = {
   authors: [{ name: "La'Moniega Integrated Services Ltd" }],
   creator: "La'Moniega Integrated Services Ltd",
   publisher: "La'Moniega Integrated Services Ltd",
-  formatDetection: {
-    email: false,
-    address: false,
-    telephone: false,
-  },
-  alternates: {
-    canonical: 'https://www.lamoneiqa.ng/',
-  },
-  openGraph: {
-    title: "La'Moniega Integrated Services Ltd - Professional Printing Services",
-    description: "Professional printing services including business cards, banners, books, custom merchandise, embroidery, and digital printing. Quality printing solutions for businesses and individuals.",
-    url: 'https://www.lamoneiqa.ng',
-    siteName: "La'Moniega Printing Services",
-    images: [
-      {
-        url: 'https://www.lamoneiqa.ng/logo v1.png',
-        width: 1200,
-        height: 630,
-        alt: "La'Moniega Integrated Services Ltd Logo",
-      },
-    ],
-    locale: 'en_US',
-    type: 'website',
-  },
-  twitter: {
-    card: 'summary_large_image',
-    title: "La'Moniega Integrated Services Ltd - Professional Printing Services",
-    description: "Professional printing services including business cards, banners, books, custom merchandise, embroidery, and digital printing.",
-    images: ['/logo v1.png'],
-  },
   robots: {
     index: true,
     follow: true,
-    googleBot: {
-      index: true,
-      follow: true,
-      'max-video-preview': -1,
-      'max-image-preview': 'large',
-      'max-snippet': -1,
-    },
-  },
-  verification: {
-    google: 'your-google-verification-code',
-    yandex: 'your-yandex-verification-code',
-    yahoo: 'your-yahoo-verification-code',
   },
 };
 
@@ -92,6 +47,28 @@ export default async function RootLayout({
   const session = await getServerSession();
   return (
     <html lang="en" data-theme="light">
+      <head>
+        <link rel="canonical" href="https://www.lamoneiqa.ng/" />
+        <meta property="og:title" content="La'Moniega Integrated Services Ltd - Professional Printing Services" />
+        <meta property="og:description" content="Professional printing services including business cards, banners, books, custom merchandise, embroidery, and digital printing." />
+        <meta property="og:url" content="https://www.lamoneiqa.ng" />
+        <meta property="og:site_name" content="La'Moniega Printing Services" />
+        <meta property="og:image" content="https://www.lamoneiqa.ng/logo v1.png" />
+        <meta property="og:image:width" content="1200" />
+        <meta property="og:image:height" content="630" />
+        <meta property="og:image:alt" content="La'Moniega Integrated Services Ltd Logo" />
+        <meta property="og:locale" content="en_US" />
+        <meta property="og:type" content="website" />
+        
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:title" content="La'Moniega Integrated Services Ltd - Professional Printing Services" />
+        <meta name="twitter:description" content="Professional printing services including business cards, banners, books, custom merchandise, embroidery, and digital printing." />
+        <meta name="twitter:image" content="https://www.lamoneiqa.ng/logo v1.png" />
+        
+        <meta name="google-site-verification" content="your-google-verification-code" />
+        <meta name="yandex-verification" content="your-yandex-verification-code" />
+        <meta name="msvalidate.01" content="your-bing-verification-code" />
+      </head>
       <body className={inter.className}>
       <SessionProvider session={session}>
         <StructuredData type="organization" />

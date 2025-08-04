@@ -14,10 +14,10 @@ const nextConfig = {
       },
     // Enable compression
     compress: true,
-    // Enable experimental features for better SEO
-    experimental: {
-      optimizeCss: true,
-    },
+    // Remove experimental CSS optimization that requires critters
+    // experimental: {
+    //   optimizeCss: true,
+    // },
     // Headers for better SEO and performance
     async headers() {
       return [

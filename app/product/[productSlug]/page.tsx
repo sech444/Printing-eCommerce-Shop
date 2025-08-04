@@ -17,77 +17,11 @@ import { FaSquareFacebook, FaSquareXTwitter, FaSquarePinterest } from "react-ico
 const apiUrl = process.env.NEXT_PUBLIC_API_URL;
 
 export async function generateMetadata({ params }: { params: { productSlug: string } }): Promise<Metadata> {
-  // For build time, return static metadata to avoid fetch issues
-  if (!apiUrl || process.env.NODE_ENV === 'production') {
-    return {
-      title: 'Product - La\'Moniega Printing Services',
-      description: 'Professional printing services with high-quality materials and fast turnaround times.',
-      openGraph: {
-        title: 'Product - La\'Moniega Printing Services',
-        description: 'Professional printing services with high-quality materials and fast turnaround times.',
-        images: ['https://www.lamoneiqa.ng/product_placeholder.jpg'],
-        url: `https://www.lamoneiqa.ng/product/${params.productSlug}`,
-        type: 'website',
-      },
-    };
-  }
-
-  try {
-    const productRes = await fetch(`${apiUrl}/api/slugs/${params.productSlug}`, {
-      method: "GET",
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      next: { revalidate: 3600 } // Cache for 1 hour
-    });
-
-    if (!productRes.ok) {
-      return {
-        title: 'Product Not Found',
-        description: 'The requested product could not be found.',
-      };
-    }
-
-    const product = await productRes.json();
-
-    if (!product || product.error) {
-      return {
-        title: 'Product Not Found',
-        description: 'The requested product could not be found.',
-      };
-    }
-
-    return {
-      title: `${product.title} - La'Moniega Printing Services`,
-      description: product.description || `${product.title} - Professional printing services with high-quality materials and fast turnaround times.`,
-      openGraph: {
-        title: `${product.title} - La'Moniega Printing Services`,
-        description: product.description || `${product.title} - Professional printing services with high-quality materials and fast turnaround times.`,
-        images: [
-          {
-            url: product.mainImage ? `https://www.lamoneiqa.ng/${product.mainImage}` : 'https://www.lamoneiqa.ng/product_placeholder.jpg',
-            width: 500,
-            height: 500,
-            alt: product.title,
-          },
-        ],
-        url: `https://www.lamoneiqa.ng/product/${params.productSlug}`,
-        type: 'website',
-      },
-      twitter: {
-        card: 'summary_large_image',
-        title: `${product.title} - La'Moniega Printing Services`,
-        description: product.description || `${product.title} - Professional printing services with high-quality materials and fast turnaround times.`,
-        images: [product.mainImage ? `https://www.lamoneiqa.ng/${product.mainImage}` : 'https://www.lamoneiqa.ng/product_placeholder.jpg'],
-      },
-    };
-  } catch (error) {
-    console.error('Error generating metadata:', error);
-    return {
-      title: 'Product - La\'Moniega Printing Services',
-      description: 'Professional printing services with high-quality materials and fast turnaround times.',
-    };
-  }
+  // Return static metadata to avoid build issues
+  return {
+    title: `Product - La'Moniega Printing Services`,
+    description: 'Professional printing services with high-quality materials and fast turnaround times.',
+  };
 }
 
 interface ImageItem {
