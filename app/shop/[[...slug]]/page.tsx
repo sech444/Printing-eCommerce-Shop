@@ -8,7 +8,23 @@ import {
   Products,
   SortBy,
 } from "@/components";
+import { Metadata } from "next";
 import React from "react";
+
+export async function generateMetadata({ params }: { params: { slug?: string[] } }): Promise<Metadata> {
+  const category = params.slug?.[0];
+  const categoryName = category ? improveCategoryText(category) : "All Products";
+  
+  return {
+    title: `${categoryName} - Professional Printing Services`,
+    description: `Browse our ${categoryName.toLowerCase()} collection. Professional printing services with high-quality materials and fast turnaround times.`,
+    openGraph: {
+      title: `${categoryName} - La'Moniega Printing Services`,
+      description: `Browse our ${categoryName.toLowerCase()} collection. Professional printing services with high-quality materials and fast turnaround times.`,
+      url: `/shop${category ? `/${category}` : ''}`,
+    },
+  };
+}
 
 // improve readabillity of category text, for example category text "smart-watches" will be "smart watches"
 const improveCategoryText = (text: string): string => {

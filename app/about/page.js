@@ -1,6 +1,27 @@
 import React from 'react';
 import { Library, Printer, Clock, Users, CheckCircle, Award } from 'lucide-react';
 
+export const metadata = {
+  title: "About Us - La'Moniega Integrated Services Ltd",
+  description: "Learn about La'Moniega Integrated Services Ltd, your trusted partner in professional printing services. We deliver excellence and quality in commercial printing, document services, and custom solutions.",
+  keywords: [
+    "about lamoniega",
+    "printing company",
+    "professional printing services",
+    "commercial printing",
+    "document services",
+    "custom printing solutions",
+    "quality printing",
+    "printing business"
+  ],
+  openGraph: {
+    title: "About Us - La'Moniega Integrated Services Ltd",
+    description: "Learn about La'Moniega Integrated Services Ltd, your trusted partner in professional printing services. We deliver excellence and quality in commercial printing, document services, and custom solutions.",
+    url: '/about',
+    type: 'website',
+  },
+};
+
 const AboutPage = () => {
   const services = [
     {

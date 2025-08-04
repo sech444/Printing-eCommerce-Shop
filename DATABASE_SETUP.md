@@ -60,7 +60,7 @@ Both `.env` and `server/.env` files have been updated to use the local database.
 If you need to use the remote database again, uncomment the remote URLs in the `.env` files and comment out the local database URL.
 
 ## Troubleshooting
-
+Not using docker but I'm using vercel database
 1. **Docker not running:** Make sure Docker Desktop is started
 2. **Port 5432 in use:** Stop any other PostgreSQL instances or change the port in docker-compose.yml
 3. **Permission denied:** Make sure the setup script is executable: `chmod +x setup-db.sh`
