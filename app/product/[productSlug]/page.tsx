@@ -38,35 +38,49 @@ interface SingleProductPageProps {
 
 const SingleProductPage = async ({ params }: SingleProductPageProps) => {
   try {
-    // Corrected API request for a single product with a given product slug
+    // Use the API URL from environment variables
+    if (!apiUrl) {
+      console.error('NEXT_PUBLIC_API_URL is not defined in environment variables');
+      return notFound();
+    }
+    
+    // Fetch product data
     const productRes = await fetch(`${apiUrl}/api/slugs/${params.productSlug}`, {
-      method: "GET",
-    //   headers: {
-    //     Authorization: `Bearer ${process.env.NEXT_PUBLIC_API_KEY}`,
-    //     "Content-Type": "application/json",
-    //   },
-    // });
-    headers: {
-      'Content-Type': 'application/json'
-    },
-    signal: AbortSignal.timeout(15000)
-  });
-    if (!productRes.ok) throw new Error("Failed to fetch product data");
-    const product = await productRes.json();
-
-    // Corrected API request for more than 1 product image if it exists
-    const imagesRes = await fetch(`${apiUrl}/api/images/${product.id}`, {
       method: "GET",
       headers: {
         'Content-Type': 'application/json'
       },
-      signal: AbortSignal.timeout(15000)
+      next: { revalidate: 3600 }, // Cache for 1 hour
     });
-    if (!imagesRes.ok) throw new Error("Failed to fetch product images");
-    const images: ImageItem[] = await imagesRes.json();
+
+    if (!productRes.ok) {
+      console.error(`Product API error: ${productRes.status} ${productRes.statusText}`);
+      return notFound();
+    }
+
+    const product = await productRes.json();
 
     if (!product || product.error) {
       return notFound();
+    }
+
+    // Fetch product images (with error handling)
+    let images: ImageItem[] = [];
+    try {
+      const imagesRes = await fetch(`${apiUrl}/api/images/${product.id}`, {
+        method: "GET",
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        next: { revalidate: 3600 },
+      });
+      
+      if (imagesRes.ok) {
+        images = await imagesRes.json();
+      }
+    } catch (imageError) {
+      console.warn('Failed to fetch product images:', imageError);
+      // Continue without images
     }
 
     return (
