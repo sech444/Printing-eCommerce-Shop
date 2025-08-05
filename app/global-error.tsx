@@ -20,7 +20,7 @@ export default function GlobalError({
                 Something went wrong
               </h2>
               <p className="text-gray-600 mb-8">
-                We're sorry, but something went wrong on our end.
+                We&apos;re sorry, but something went wrong on our end.
               </p>
             </div>
             
